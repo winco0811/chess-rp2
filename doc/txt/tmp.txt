@@ -1,0 +1,36 @@
+https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
+ideja za spremanje partija
+
+funkcijonalnost:
+login:
+	registracija
+	forgotten pass: baza
+	
+matchmaking: 
+	biranje i random
+chat? privatni i in game
+spremanje chat historyja u bazu??? session
+
+kad se pritisne na korisnika gumbi za privatni chat ili za invite
+
+igra: 
+	draw, resign
+	draw: zapiši u bazu u wants draw true, i provjeri jel želi i protivnik, igranje poteza odbija draw
+	game history: u session? šahovska notacija
+	disconnect od igre
+	history igara
+	
+
+
+
+
+
+
+
+baza:
+	field za šifru forgotten pass, used ili ne
+	field za notifikacije (od koga, rejected)
+	field za mute_requests
+	field in_game
+	field wants_draw
+	tablica za history : player1, player2, game_string
