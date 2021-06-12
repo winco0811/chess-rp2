@@ -65,7 +65,7 @@ function create_table_history()
 	try
 	{
 		$st = $db->prepare(
-			'CREATE TABLE IF NOT EXISTS loans (' .
+			'CREATE TABLE IF NOT EXISTS history (' .
 			'game_id int NOT NULL PRIMARY KEY,' .
 			'username1 varchar(50) NOT NULL,' .
 			'username2 varchar(50) NOT NULL,' .
