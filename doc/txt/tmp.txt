@@ -34,3 +34,31 @@ baza:
 	field in_game
 	field wants_draw
 	tablica za history : player1, player2, game_string
+
+	ploča bude u $board={'BR','BN','BB','BQ','BK',....,......,'B','-','-','-'......}
+
+	$seached=''
+	lista aktivnih korisnika $active={} ... {{'vinko', true //jel igra?},{'dora',false}....}
+	
+	$user_name='vinko';
+	$history={{'dora','id'},{}}
+	1. Vinko vs Dora, time, <a>link</a> ...
+	
+	
+
+	.../index.php?rt=users/login
+	.../index.php?rt=users/register
+	.../index.php?rt=users/forgotten
+	.../index.php?rt=users/logout
+	.../index.php?rt=game/move
+	.../index.php?rt=home
+	.../index.php?rt=home/history
+	.../index.php?rt=home/search+searched='vinko'
+	.../
+
+
+	metode: serviraj aktivne korisnike
+		serviraj aktivne korisnike sa filtrom
+		vraćaj je li je potez legalan
+		vraćaj je li igra završila (-1, 0, 1, 2) (draw, no win, white, black)
+		 

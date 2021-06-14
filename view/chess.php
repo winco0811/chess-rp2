@@ -7,14 +7,14 @@ function draw_LogIN( $message = '' )
 	<html>
 	<head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css"> <!--dati ideju za bootstrap-->
 		<meta charset="utf8" />
 		<title>Login</title>
 	</head>
 	<body>
     
     <div class="login-content">
-		<form id="login" method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
+		<form id="login" method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"> <!-- mora na controller, ne na sebe -->
             <h2>Log in</h2>
 		
 			<br />
@@ -27,8 +27,8 @@ function draw_LogIN( $message = '' )
             <br />
 			<button type="submit" class="gumb" name="gumb" value="login">Log in</button>
             <br /><br />
-            <button type="submit" class="gumb2" name="gumb" value="login">Register</button>
-            <button type="submit" class="gumb3" name="gumb" value="login">Forgot password?</button>
+            <button type="submit" class="gumb2" name="gumb" value="login">Register</button> <!--treba biti dio forme?-->
+            <button type="submit" class="gumb3" name="gumb" value="login">Forgot password?</button> <!--isto-->
 
 		</form>
     </div>
@@ -39,7 +39,7 @@ function draw_LogIN( $message = '' )
     
     <h3> 
             
-            Already #thismanyusers has it.
+            Already #thismanyusers has it. <!--to ce biti doslovno variabla koju ce controller dati preko registra viewu-->
             Don't miss out on something great!
             Join your friends and show them what you can do!
     </h3>
@@ -77,11 +77,11 @@ function draw_LogIN( $message = '' )
 function draw_succ_login()
 {
 	
-    header('Location: stranica.php');
+    header('Location: stranica.php'); //dio controllera, treba biti poseban view
 	
 }
 
-function draw_Register($message = ''){
+function draw_Register($message = ''){   //poseban view (treci)
     ?>
 <!DOCTYPE html>
 	<html>
@@ -111,10 +111,10 @@ function draw_Register($message = ''){
             <br /><br />
 
 		</form>
-    </div>
+    </div> <!-- moramo nekako moci nazad na login ako smo zalutali na register bez da idemo back-->
     
 
-    <div class="join-us">
+    <div class="join-us"> <!-- ovo se moze staviti u poseban fajl i includeati u viewove koji ga trebaju, da se smanji ponavljanje-->
         <h2>Don't have an account?</h2>
     
     <h3> 
@@ -144,7 +144,7 @@ function draw_Register($message = ''){
 <?php
 }
 
-function draw_succ_registered()
+function draw_succ_registered() //isto, controller radi, samo treba napisati view koji ce se pojaviti kad je sucessful
 {
 	
     header('Location: chess.php');
