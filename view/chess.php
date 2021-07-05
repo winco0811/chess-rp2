@@ -14,7 +14,7 @@ function draw_LogIN( $message = '' )
 	<body>
     
     <div class="login-content">
-		<form id="login" method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"> <!-- mora na controller, ne na sebe -->
+		<form id="login" method="post" action="pocetna.php"> <!-- mora na controller, ne na sebe -->
             <h2>Log in</h2>
 		
 			<br />
@@ -27,8 +27,8 @@ function draw_LogIN( $message = '' )
             <br />
 			<button type="submit" class="gumb" name="gumb" value="login">Log in</button>
             <br /><br />
-            <button type="submit" class="gumb2" name="gumb" value="login">Register</button> <!--treba biti dio forme?-->
-            <button type="submit" class="gumb3" name="gumb" value="login">Forgot password?</button> <!--isto-->
+            <button type="submit" class="gumb2" name="gumb" value="novi">Register</button> <!--treba biti dio forme?-->
+            <button type="submit" class="gumb3" name="gumb" value="forgot">Forgot password?</button> <!--isto-->
 
 		</form>
     </div>
@@ -150,4 +150,5 @@ function draw_succ_registered() //isto, controller radi, samo treba napisati vie
     header('Location: chess.php');
 	
 } 
+
 ?>

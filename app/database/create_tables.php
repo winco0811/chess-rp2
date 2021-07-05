@@ -19,7 +19,6 @@ function create_table_users()
 			'CREATE TABLE IF NOT EXISTS users (' .
 			'username varchar(50) NOT NULL PRIMARY KEY,' .
 			'forgotten_password INT NOT NULL,' .
-			'email INT NOT NULL,' .
 			'in_game INT NOT NULL,' .
 			'mute_requests INT NOT NULL,' .
 			'password varchar(255) NOT NULL)'
