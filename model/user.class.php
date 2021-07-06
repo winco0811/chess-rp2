@@ -1,5 +1,5 @@
 <?php
-
+//tu treba kopirati db.class.php da bi radilo??, s require_once ne radi
 class User
 {
 	protected $username, $opponet, $color, $gameId, $move, $password;
@@ -74,7 +74,7 @@ class User
 		return $arr;
 	}
 	
-	//obrisi igru sa gameId = $gameId (postavi gameId na 0)
+	//obrisi igru sa gameId = $gameId (postavi gameId na 0, izbrisi boju, varijablu move i opponet)
 	public static function deleteGame ($gameId)
 	{
 		try
