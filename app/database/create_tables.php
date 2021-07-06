@@ -18,9 +18,10 @@ function create_table_users()
 		$st = $db->prepare(
 			'CREATE TABLE IF NOT EXISTS users (' .
 			'username varchar(50) NOT NULL PRIMARY KEY,' .
-			'forgotten_password INT NOT NULL,' .
-			'in_game INT NOT NULL,' .
-			'mute_requests INT NOT NULL,' .
+			'opponet varchar(50) NOT NULL,' .
+			'color varchar(10) NOT NULL,' .
+			'gameId INT NOT NULL,' .
+			'move varchar(100) NOT NULL,' .
 			'password varchar(255) NOT NULL)'
 		);
 

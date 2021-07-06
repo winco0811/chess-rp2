@@ -1,7 +1,6 @@
 <?php
 require_once 'app/database/db.class.php';
 
-
 function procesiraj_login()
 {
 	// Provjeri sastoji li se ime samo od slova; ako ne, crtaj login formu.
@@ -86,15 +85,16 @@ function procesiraj_novi()
 		try
 		{
 			// Prvo pripremi insert naredbu.
-			$st = $db->prepare( 'INSERT INTO users (username, forgotten_password, in_game, mute_requests, password) VALUES (:username, :forgotten_password, :in_game, :mute_requests, :hash)' );
+			$st = $db->prepare( 'INSERT INTO users (username, opponet, color, gameId, move, password) VALUES (:username, :opponet, :color, :gameId, :move, :hash)' );
 
 			// Napravi hash od passworda kojeg je unio user.
 			$hash = password_hash( $_POST["password"], PASSWORD_DEFAULT );
-      $forgotten = 0;
-			$mute = 0;
-			$inGame = 0;
+      $opp = "";
+			$col = "";
+			$game = 0;
+			$mve = "";
 			// Izvrši sad tu insert naredbu. Uočite da u bazu stavljamo hash, a ne $_POST["password"]!
-			$st->execute( array( 'username' => $_POST["username"], 'forgotten_password' => $forgotten, 'in_game' => $inGame , 'mute_requests' => $mute, 'hash' => $hash) );
+			$st->execute( array( 'username' => $_POST["username"], 'opponet' => $opp, 'color' => $col , 'gameId' => $game, 'move' => $mve, 'hash' => $hash) );
 		}
 		catch( PDOException $e ) { draw_LogIN( 'Error:' . $e->getMessage() ); return; }
 
