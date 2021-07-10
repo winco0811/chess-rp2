@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+
+  	<title>Chess</title>
+	<meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/playstyle.css">
+
+</head>
+
+<body>
+<div id="board">
+	<div id="pawn-promotion-option" class="hide">
+		 <span id="queen" class="option"></span>
+		 <span id="rook" class="option"></span>
+		 <span id="knight" class="option"></span>
+		 <span id="bishop" class="option"></span>
+	</div>
+	<!--ovdje koristimo angular za postavljanje ploce (kao for petlja)-->
+	<div id="game" ng-app="chess" ng-controller="game">
+		 <div class="row" ng-repeat="y in widths">
+			  <div class="box" ng-repeat="x in widths" ng-attr-id="{{'box-' + x + '-' + y}}" piece="">
+			  </div>
+		 </div>
+	</div>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js'></script>
+<script  src="../js/rules.js"></script>
+
+</body>
+</html>
