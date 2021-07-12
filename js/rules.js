@@ -1,10 +1,9 @@
 angular.module('chess', []).controller('game', ['$scope', function($scope) {
 	
 	//Nacrtaj plocu
-    $scope.size = 8;
     $scope.widths = [];
 
-    for(var i = 0; i < $scope.size; i++) { 
+    for(var i = 0; i < 8; i++) { 
         $scope.widths.push(i);
     }
 	
@@ -47,48 +46,51 @@ $(document).ready(function() {
 
 	//Postavi plocu
 	$(function() {	
-
 		 //ovisno je li broj paran postavlja polje na crno ili bijelo
 		 for(var i = 0; i < 8; i++) {
 			  for(var j = 0; j < 8; j++) {
 					var box = $('#box-' + i + '-' + j);
 					if((i + j) % 2 !== 0) {
-						 box.addClass('light-box');
-					} else {
 						 box.addClass('dark-box');
+					} else {
+						 box.addClass('light-box');
 					}
+					//postavi figuru na mjesto (i,j)
 					setNewBoard(box, i, j); 
 			  }
 		 }		 
 		 setTheme();
 	});
 
-		//funkcija odgovorna za klik evente
+	//funkcija odgovorna za klik evente
+	//CLICKEVENT FUNCTION
 	$(function() {
-	//pijun je promaknut:
-			$('#pawn-promotion-option .option').on('click', function() {
+			//pijun je promaknut:	
+			var promote = $('#pawn-promotion-option .option');
+			promote.on('click', function() {
 
-			  var newType = $(this).attr('id');
-			  promotion.box.html(chessPieces[promotion.color][newType]);
-			  promotion.box.addClass('placed');
-			  promotion.box.attr('piece', promotion.color + '-' + newType);
+				var newType = $(this).attr('id');
+				promotion.box.html(chessPieces[promotion.color][newType]);
+				promotion.box.addClass('placed');
+				promotion.box.attr('piece', promotion.color + '-' + newType);
 
-			  $('#pawn-promotion-option').addClass('hide');
-			  $('#game').css('opacity', '1');
+				$('#pawn-promotion-option').addClass('hide');
+				$('#game').css('opacity', '1');
 
-			  promotion = {};
-		 });
-
+			});
 
 		 //kada kliknemo na polje poziva se ova funkcija
 		 $('.box').on('click', function() {
+			 
 			  if($(this).hasClass('selected')) { 
-			  		//ako je prije bila selektirana, odselektiraj ju
+			  	//ako je prije bila selektirana, odselektiraj ju
 					$(this).removeClass('selected');
-
 					//makni oznacena polja za sugestiju poteza
 					$('.box').removeClass('suggest'); 
-					select = { canMove: false, piece: '', box: '' };
+					select ={ canMove: false, 
+										piece: '', 
+										box: '' 
+									};
 					return;
 			  }
 
@@ -101,7 +103,7 @@ $(document).ready(function() {
 					}
 			  }
 
-			  //Set up new destination for selected box
+			  //Nova destinacija za figuru
 			  else if(select.canMove) { 
 					var selectedPieceInfo = select.piece.split('-');
 					var color = selectedPieceInfo[0];
@@ -119,7 +121,7 @@ $(document).ready(function() {
 					if($(this).hasClass('suggest')) { 
 
 
-						 //Move selected piece successfully
+						 //Postavi figuru na polje
 						 setPiece($(this), color, type);
 
 						 //izbrisi polje
@@ -136,8 +138,8 @@ $(document).ready(function() {
 						switchPlayer();
 					}
 			  }
-		 });
-	});
+		 	});
+		});
 
 	//dohvati figuru i poziciju
 	var selectPiece = function(box) {
@@ -146,7 +148,8 @@ $(document).ready(function() {
 		 select.box = box.attr('id');
 		 select.piece = box.attr('piece');
 
-		 suggestNextMoves(getNextMoves(select.piece, select.box));
+		 var moves = getNextMoves(select.piece, select.box);
+		 suggestNextMoves(moves);
 	}
 
 	//legalni potezi://
@@ -306,11 +309,11 @@ $(document).ready(function() {
 	}
 
 	//za sve legalne poteze dodaj klasu "suggest" svakom polju
-	var suggestNextMoves = function(nextMoves) {
-		 for(var move of nextMoves) {
-			  var box = $('#box-' + move[0] + '-' + move[1]);
-			  box.addClass('suggest');
-		 }
+	var suggestNextMoves = function(nextMoves) {		
+		for(var move of nextMoves) {
+			 var box = $('#box-' + move[0] + '-' + move[1]);
+			 box.addClass('suggest');
+		}
 	}
 
 
@@ -394,7 +397,6 @@ $(document).ready(function() {
 		 }
 	}
 
-	//Switch player
 	var switchPlayer = function() {
 		 if(player === 'black') {
 			  player = 'white';
@@ -403,7 +405,6 @@ $(document).ready(function() {
 		 }
 	}
 
-	//
 	var showWinner = function(winner) {
 		console.log(player + " is a winner");
 		$('#game').css('opacity', '0.5');
