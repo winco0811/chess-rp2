@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_main.css">
+	<meta charset="utf8">
+	<title>Zadatak 1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+
+    <div class="naslov">
+        <h1>Online Chess</h1>             
+    </div>
+
+    <div class="search_players">
+        <h2>Search:</h2>
+	<input id="txt1" type="text" name="username" placeholder="Enter username you want to search for" />
+	<button class="gumb" name="gumb" id="search">Search!</button>
+    </div>
+    
+    <div class="lista">   
+        <ul id="listof"></ul>
+    </div>
+    
+
+	<script>
+$( document ).ready( function()
+{
+	$( "button" ).on( "click", lista );
+} );
+
+
+lista = function()
+{
+	// Na koji gumb je kliknuto?
+	var op = $( this ).prop( "id" );
+
+	// Ajaxom pošalji operande i operator, dohvati rezultat
+	$.ajax(
+	{
+		url: "main3.php",
+		data:
+		{
+			q: $( "#txt1" ).val(),
+            op:op
+		},
+		success: function( data )
+		{
+			$( "#listof" ).html( data );
+		},
+        error: function(xhr, status)
+        {
+            if(status !== null)
+                console.log("Greška prilikom Ajax poziva: " + status);
+        }
+	} );
+}
+
+	</script>
+
+<div id="vid" class="video">
+    <h2>Don't know how to play?
+        Check out this resources:
+        </h2>
+    
+        <list class="list">
+        <li><a href="https://www.youtube.com/watch?v=fKxG8KjH1Qg" target="_blank" rel="noopener noreferrer">video</a></li>
+        <li><a href="https://www.instructables.com/Playing-Chess/" target="_blank" rel="noopener noreferrer">instructions</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Rules_of_chess" target="_blank" rel="noopener noreferrer">rules of chess - Wikipedia</a></li>
+        </list>
+    </div>
+
+    <form method="post" action="controller2.php">
+        <button type="submit" class="gumb1" name="gumb1" value="history">History</button>
+    </form>
+</body>
+</html>
