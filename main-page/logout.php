@@ -21,7 +21,7 @@ session_start();
     <h2>Are you sure you want to logout?</h2><br><br>
     <div>
     <a href="main2.html" class="button1"><h3>Return to the main page</h3></a>
-    <a href="logout.php" class="button2"><h3>Log out</h3></a>
+    <a href="../view/pocetna.php" class="button2"><h3>Log out</h3></a>
     </div>
 </div>
 
