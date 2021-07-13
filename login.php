@@ -57,11 +57,14 @@ function procesiraj_novi()
 {
 	// Provjeri sastoji li se ime samo od slova; ako ne, crtaj login formu.
 	if( !isset( $_POST["username"] ) || preg_match( '/[a-zA-Z]{1, 20}/', $_POST["username"] ) )
-		draw_LogIN();
+		draw_registration();
 
 	// Možda se ne šalje password; u njemu smije biti bilo što.
 	if( !isset( $_POST["password"] ) )
-		draw_LogIN();
+		draw_registration();
+		
+	if( !isset( $_POST["email"] ) )
+		draw_registration();
 
 	// Sve je OK, provjeri jel ga ima u bazi.
 	$db = DB::getConnection();
@@ -71,12 +74,12 @@ function procesiraj_novi()
 		$st = $db->prepare( 'SELECT password FROM users WHERE username=:username' );
 		$st->execute( array( 'username' => $_POST["username"] ) );
 	}	
-	catch( PDOException $e ) { draw_LogIN( 'Error:' . $e->getMessage() ); return; }
+	catch( PDOException $e ) { draw_registration( 'Error:' . $e->getMessage() ); return; }
 
 	if( $st->rowCount() > 0 )
 	{
 		// Taj korisnik već postoji. Ponovno crtaj login.
-		draw_LogIN( 'Username already exist.' );
+		draw_registration( 'Username already exist.' );
 		return;
 	}
 	else
@@ -95,11 +98,10 @@ function procesiraj_novi()
 			$mve = "";
 			// Izvrši sad tu insert naredbu. Uočite da u bazu stavljamo hash, a ne $_POST["password"]!
 			$st->execute( array( 'username' => $_POST["username"], 'opponet' => $opp, 'color' => $col , 'gameId' => $game, 'move' => $mve, 'hash' => $hash) );
+			header('Location: succesfull_registration.php');
 		}
-		catch( PDOException $e ) { draw_LogIN( 'Error:' . $e->getMessage() ); return; }
+		catch( PDOException $e ) { draw_registration( 'Error:' . $e->getMessage() ); return; }
 
-		// Sad ponovno nacrtaj login formu, tako da se user proba ulogirati.
-		draw_LogIN( 'You successfuly registered!' );
 	}
 }
 ?>

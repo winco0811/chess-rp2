@@ -14,7 +14,7 @@ function draw_registration( $message = '' )
     
 <div class="login-content">
 
-	<form id="login" method="post" action="pocetna.php">
+	<form id="login" method="post" action="processRegistration.php">
         <h2>Register</h2>
 		
 		<br />
@@ -27,11 +27,11 @@ function draw_registration( $message = '' )
         <input class= "box" type="email" name="email" placeholder="e-mail" />
         <br />
         <br />
-		<button type="submit" class="gumb2" value="register">Register</button>
+		<button type="submit" class="gumb2" name="gumb" value="register">Register</button>
         <br /><br />
 	</form>
 
-    <p id="link2"><a href="chess.php">Log in page</a></p>
+    <p id="link2"><a href="pocetna.php">Log in page</a></p>
 </div>
     
 
@@ -40,7 +40,6 @@ function draw_registration( $message = '' )
     
 <h3> 
             
-        Already #thismanyusers has it.
         Don't miss out on something great!
         Join your friends and show them what you can do!
 </h3>
@@ -72,4 +71,6 @@ function draw_registration( $message = '' )
 	</body>
 </html>
 
-<?php } ?>
+<?php } 
+
+?>

@@ -11,7 +11,7 @@
 <div class="login-content">
 
 	<h2>Congratulations!</h2>
-    <h3>You've successfully registered. We've sent you an email with link for confirmation </h3>
+    <h3>You've successfully registered. You can now play with your friends!</h3>
 
     <p id="link2"><a href="chess.php">Log in page</a></p>
 </div>
