@@ -204,15 +204,11 @@ $(document).ready(function() {
 					nextMoves = otherPiecesMoves(i, j, color, offset);
 					break;
 			  case 'queen':
-					var offset1 = [
-						 [1, 1], [1, -1], [-1, 1], [-1, -1]
-					];
-					var offset2 = [
+					var offset = [
+						 [1, 1], [1, -1], [-1, 1], [-1, -1],
 						 [0, 1], [0, -1], [1, 0], [-1, 0]
 					];
-					nextMoves1 = otherPiecesMoves(i, j, color, offset1);
-					nextMoves2 = otherPiecesMoves(i, j, color, offset2);
-					nextMoves = nextMoves1.concat(nextMoves2);
+					nextMoves = otherPiecesMoves(i, j, color, offset);
 					break;
 			  case 'king':
 					var offset = [
