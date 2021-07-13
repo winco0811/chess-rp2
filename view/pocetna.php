@@ -1,4 +1,5 @@
 <?php 
+session_start();
 
 require_once 'chess.php';
 require_once '../login.php';
@@ -9,5 +10,12 @@ else if( isset( $_POST["gumb" ] ) && $_POST["gumb"] === "novi" )
 	procesiraj_novi();
 else
 	draw_LogIN();
+
+if( isset($_SESSION['username']) && isset($_POST['logout'] ) ){
+	unset($username);
+	session_unset();
+	session_destroy();
+}
+
 
 ?>
