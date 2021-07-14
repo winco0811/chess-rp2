@@ -12,7 +12,7 @@ else
 	draw_LogIN();
 
 if( isset($_SESSION['username']) && isset($_POST['logout'] ) ){
-	unset($username);
+	unset($_SESSION["username"]);
 	session_unset();
 	session_destroy();
 }

@@ -1,25 +1,39 @@
 <?php
 
-require_once 'db.class.php';
+require_once '../app/database/db.class.php';
+require_once '../model/user.class.php';
 
-#$imena = ["Ana123", "Mirko456", "Anaaa"];
+//$imena = ["Ana123", "Mirko456", "Anaaa"];
 
-#if(isset($_GET['q']))
-#    $ulaz = $_GET['q'];
+if(isset($_GET['q']))
+    $ulaz = $_GET['q'];
 
-#if(isset($_GET['op']))
-#    $op = $_GET['op'];
+if(isset($_GET['op']))
+    $op = $_GET['op'];
 
 $db = DB::getConnection();
 
-try
-    {
-        $st = $db->prepare( 'SELECT username FROM user' );
-        $st->execute( array() );
-    }
-    catch( PDOException $e ) { echo 'Greška:' . $e->getMessage(); exit(); }
+function getAllUsers( )
+{
+  try
+  {
+    $db = DB::getConnection();
+    $st = $db->prepare( 'SELECT username, opponet, color, gameId, move, password FROM users' );
+    $st->execute();
+  }
+  catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
 
-    $imena = $st->fetch(); //treba sadržavati sve username-ove u bazi
+  $arr = array();
+  while( $row = $st->fetch() )
+  {
+        $user = new User( $row['username'], $row['opponet'], $row['color'],$row['gameId'], $row['move'] ,$row['password'] );
+        $arr[] = $user->username;
+  }
+
+  return $arr;
+}
+
+$imena = getAllUsers(); //treba sadržavati sve username-ove u bazi
 
 if(isset($op)){
 

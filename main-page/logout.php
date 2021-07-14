@@ -21,7 +21,7 @@ session_start();
     <h2>Are you sure you want to logout?</h2><br><br>
     <div>
     <a href="main2.html" class="button1"><h3>Return to the main page</h3></a>
-    <form method="post" action="../view/pocetna.php">
+    <form method="post" action="../view/chess.php">
 			<button type="submit" id = "button2" name="logout" value="yes"><h3>Logout</h3></button>
 	</form>
     </div>
