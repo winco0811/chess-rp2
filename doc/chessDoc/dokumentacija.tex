@@ -166,4 +166,18 @@ U \verb|login.php| imamo dvije funkcije: \verb|procesiraj_login()| i \verb|proce
 
 U \verb|register.php| se nalazi funkcija koja služi za crtanje forme pri registraciji korisnika. Nju pozivamo u \verb|processRegistration.php| kada korisnik još nije kliknuo na gumb register. Jednom kada je kliknuo gumb register, poziva se funkcija \verb|procesiraj_novi()| iz \verb|login.php|.
 
+\section{Baza podataka}
+
+\subsection{users}
+U bazi podataka imamo nekoliko tablica. Prva tablica je \verb|users| u kojima spremamo podatke poput: \verb|username| koji je ujedno i primarni ključ jer nije dozvoljeno da postoje dva korisnika s istim username-om, \verb|opponet| u kojem spremamo username protivnika protiv kojeg korisnik igra (na početku je prazan), \verb|color| koja označava s kojom bojom korisnik igra (black ili white), \verb|gameId| koji označava u kojoj partiji šaha korisnik igra (ako je \verb|gameId| jednak $0$ to znači da korisnik ne igra trenutno partiju). Na kraju, još moramo čuvati i hashiranu lozinku korisnika koju provjeravamo tijekom logiranja na stranicu.
+
+\section{Model}
+
+\subsection{User}
+U modelu imamo nekoliko klasa. Najbitnija od njih svih je klasa \verb|User|. U toj klasi imamo definirane funkcije kao što su \verb|getAllUsers()| pomoću koje dohvaćamo sve korisnike aplikacije. Pomoću funkcije \verb|getUserByUsername(username)| dohvaćamo traženog korisnika iz baze podataka. Funkcijom \verb|availablePlayers| pronalazimo korisnike koji trenutno ne igraju partiju, odnosno njima možemo poslati zahtjev za igru. Znamo da su određeni korisnici slobodni za partiju ako im je \verb|gameId| $=0$, inače ako je korisnik u partiji tada mu je gameId drugačiji broj. Na kraju, imamo funkciju \verb|deleteGame(gameId)| koja služi da obriše \verb|gameId|, odnosno da taj \verb|gameId| postavi ponovno na $0$ i tako označi da su ta dva igrača opet slobodni za igru.
+
+\subsection{Game}
+
+U klasi \verb|Game| imamo funkciju \verb|findLastMove| koja pronalazi zadnji potez igre \verb|gameId|. Pomoću funkcije \verb|findColor| možemo pronaći s kojom bojom korisnik igra. Funkcija \verb|insert| ubacuje potez u bazu podataka gdje je \verb|gameId|=\verb|id|
+
 \end{document}

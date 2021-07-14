@@ -27,7 +27,7 @@ function draw_LogIN( $message = '' )
 			<button type="submit" class="gumb" name="gumb" value="login">Log in</button>
             <br /><br />
             <button type="submit" class="gumb2" name="gumb" value="novi">Register</button> <!--treba biti dio forme?-->
-            <button type="submit" class="gumb3" name="gumb" value="forgot">Forgot password?</button> <!--isto-->
+          
 
 		</form>
     </div>
