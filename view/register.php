@@ -31,7 +31,7 @@ function draw_registration( $message = '' )
         <br /><br />
 	</form>
 
-    <p id="link2"><a href="pocetna.php">Log in page</a></p>
+    <p id="link2"><a href="chess.php">Log in page</a></p>
 </div>
     
 
