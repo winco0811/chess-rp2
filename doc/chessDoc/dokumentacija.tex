@@ -73,5 +73,97 @@ Funkcija pomoću koje za sve legalne poteze dodajemo tim poljima klasu \\
 
 Odabirom na figuru pozivamo ovu funkciju. Tom polju dodajemo klasu \verb|selected| te u varijablu \verb|select| postavljamo navedene vrijednosti. Dohvaćamo legalne poteze i sugeriramo na koja sva polja se figura može kretati.
 
+\section{Main page}
+U dokumentu  \textit{main2.html} nalazi se view glavne stranice web aplikacije. \newline \newline
+Omogućili smo korisniku da u tražilicu upiše korisničko ime osobe protiv koje bi htio igrati i pošalje mu zahtjev. Ako ta druga osoba prihvati oboje su preusmjereni na stranicu sa igrom šah. (Vinkov dio)
+\newline\newline
+Kako bi izbjegli stalno refreshanje stranice pri korisnikovom pretraživanju, listu osoba s tim ili sličnim korisničkim imenom dobivamo uz pomoć ajax-a kojeg pozivamo na dokument \textit{main3.php}
+\newline \newline
+Linije 28-31: naznačujemo da će se ta funkcija pozvati, tj.izvršiti samo kad korisnik pritisne gumb Search
+\newline \newline
+Linije 34-58: funkcija u kojoj se nalazi ajax. Ako je uspješan u listu ću upisati element liste koji vraća stranica \textit{main3.php}
+\newline \newline
+Linije 62-72: imamo ponavljanje koda sa stranice za login - dio koji upućuje korisnika na pomoć pri učenju igranja šaha
+\newline \newline
+Linija 78: link na stranicu za Logout koji smo u css-u oblikovali da izgleda kao gumb\newline
+
+\subsection{style for main page}
+
+Linije 9-27: navodimo svojstva scrollbar-a kojeg ima/će imati lista korisnika
+\newline\newline
+Linije 36-50: pozicioniramo naslov na stranici i navodimo njegova osnovna svojstva. Posebno, linije 46-49 zaobljuju bridove naslova - tu metodu koristimo i u oblikovanju ostalih div-ova
+\newline\newline
+Linije 52-80: Definiramo izgled \nless h1  \ngtr, \nless h2 \ngtr i \nless h3 \ngtr tag-ova
+\newline\newline
+Linije 82-90: pozicioniranje i definiranje diva u koji će stizati za poruku/obavijest - biti će hidden dok nema poruke
+\newline\newline
+Linije 92-113: Oblikujemo kućicu za unos teksta kod pretraživanja
+\newline\newline
+Linije 111-121: pozicioniramo kućicu za upis imena
+\newline\newline
+Linije 124-132: pozicioniramo i oblikujemo gumb Search
+\newline\newline
+Linije 134-149: oblikujemo i pozicioniramo div koji sadrži kućicu za pretraživanje imena
+\newline\newline
+Linije 151-164: oblikujemo i pozicioniramo div koji sadrži listu korisničkih imena koja su pretražena
+\newline\newline
+Linije 166-179: Oblikujemo listu i elemente liste
+\newline\newline
+Linije 181-197: oblikuju div u kojem se nalaze linkovi
+\newline\newline
+Linije 199-206: pozicioniranje linkova unutar div-a
+\newline\newline
+Linije 208-232: oblikujemo link za Log out da izgleda kao gumb \newline(212-215: obikujemo rubove, 217-224: zadajemo veličine i pozicioniramo, 226-229: zaobljujemo rubove)
+\newline\newline
+Od linije 234 uz pomoć @media naša stranica postaje responzivna.
+Uz svaki @media odredimo za koje veličine ekrana vrijedi i unutar njega unosimo izgled div-ova kojih želimo da se vide, za pojedine za koje ne želimo da se vide samo stavimo display:none;
+
+
+\subsection{main3.php}
+
+Sličan dokument ovom smo prošli na predavanjima. Jedina razlika je što u ovom prvo pristupamo bazi i iz nje izvlačimo potrebne podatke u polje te onda, ako polje nije prazno, vraćamo element liste koji sadrži ime osobe i gumb s kojim korisnik tu osobu zove na igru
+
+\section{style za login i register}
+
+Linije 15-29: oblikuju i pozicioniraju div u kojem se nalazi forma za login/register
+\newline\newline
+Linije 31-46: oblikuju i pozicioniraju div u kojem se nalazi tekst i slika
+\newline\newline
+Linije 48-56: obilikovanje \nless h3 \ngtr tag-a
+\newline\newline
+Linije 58-66: pozicioniranje i oblikovanje slike šah
+\newline\newline
+Linije 68-76: obilikovanje  \nless h2 \ngtr tag-a
+\newline\newline
+Linije 78-84: pozicioniranje forme za login/register
+\newline\newline
+Linije 86-103: oblikovanje kućica u koje korisnik unosi podatke
+\newline\newline
+Linije 103-110: oblikovanje forme
+\newline\newline
+Linije 113-121: pozicioniranje gumba za login
+\newline\newline
+Linije 123-142: pozicioniranje gumba za register
+\newline\newline
+Linije 152-159: oblikovanje linkova za pomoć pri učenju
+\newline\newline
+Linije 165-179: oblikovanje linkova
+\newline\newline
+
+Od linije 187 uz pomoć @media naša stranica postaje responzivna.
+Uz svaki @media odredimo za koje veličine ekrana vrijedi i unutar njega unosimo izgled div-ova kojih želimo da se vide, za pojedine za koje ne želimo da se vide samo stavimo display:none;
+
+\section{view, login/register i logout}
+
+\subsection{chess.php}
+Početna stranica aplikacije je \verb|chess.php| u kojem korisnik mora unijeti username i password kako bi nastavio dalje. \verb|chess.php| prvo crta log-in formu te prati koji gumb je kliknut te ovisno o kliknutom gumbu prikazuje određenu stranicu. Ukoliko korisnik prvi put pristupa aplikaciji, tada se mora registrirati pritiskom na gumb register. Klikom na taj gumb korisnika se prosljeđuje na stranicu za registriranje u kojem je potrebno upisati željeni username i password te svoju email adresu. Ako je korisnik krivo utipkao email adresu o tome se javlja greška. Ako username već postoji tada se opet javlja greška i ispisuje poruka.
+
+\subsection{login}
+
+U \verb|login.php| imamo dvije funkcije: \verb|procesiraj_login()| i \verb|procesiraj_novi()|. Prva funkcija provjerava da li se u varijabli \verb|POST| nalazi username i je li taj username valjan. Zatim iz baze podataka dohvaća taj username te provjerava je li se hashirane šifre podudaraju. Ako je sve dobro tada otvara novu sesiju, u tu sesiju sprema username korisnika te ga prosljeđuje na iduću stranicu. Funkcija \verb|procesiraj_novi()| se poziva pri registraciji. Ona služi da kada se korisnik ide registrirati tada u bazu podataka sprema tog korisnika sa unesenim username-om i passwordom.
+
+\subsection{register.php, processRegistration.php}
+
+U \verb|register.php| se nalazi funkcija koja služi za crtanje forme pri registraciji korisnika. Nju pozivamo u \verb|processRegistration.php| kada korisnik još nije kliknuo na gumb register. Jednom kada je kliknuo gumb register, poziva se funkcija \verb|procesiraj_novi()| iz \verb|login.php|.
 
 \end{document}

@@ -9,11 +9,5 @@ if( isset( $_POST["gumb" ] ) && $_POST["gumb"] === "register" )
 else
 	draw_registration();
 
-if( isset($_SESSION['username']) && isset($_POST['logout'] ) ){
-  	unset($username);
-  	session_unset();
-  	session_destroy();
-}
-
 
 ?>
