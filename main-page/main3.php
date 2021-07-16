@@ -3,8 +3,6 @@
 require_once '../app/database/db.class.php';
 require_once '../model/user.class.php';
 
-//$imena = ["Ana123", "Mirko456", "Anaaa"];
-
 if(isset($_GET['q']))
     $ulaz = $_GET['q'];
 
