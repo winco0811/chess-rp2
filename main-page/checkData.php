@@ -3,8 +3,6 @@
 session_start();
 require_once '../app/database/db.class.php';
 
-$changed = 0;
-
 try
   {
     $db = DB::getConnection();
@@ -20,14 +18,17 @@ try
     $_SESSION['color'] = $row['color'];
     $_SESSION['username'] = $row['username'];
     $_SESSION['opponet'] = $row['opponet'];
-    $changed = 1;
-
+    $playable = 1;
   }
   
   sleep(1);
 
-if($changed === 1)
+if($playable !== 0){
+  //nemoze igrat
     header('Location: ../chess-js/igra-test-crni.php');
-else
-    header('Location: main2.html');
+  }
+else{
+  //moze igrat, preusmjeri ga na crnog igraca
+    echo "0" . $_SESSION["username"] . " " . $_SESSION["gameId"];
+  }
 ?>
