@@ -48,22 +48,17 @@ if(isset($op)){
                     if(isset($ulaz))
                         if($ulaz !== ''){
                             if( strpos($ime, $ulaz) !== false ){
-<<<<<<< HEAD
+
                                 #echo "<a href=\"info.php?kor_ime=" . $ime . "\"><li>" . $ime . "</li></a>\n";
                                 echo "<li>" . $ime . "</li><button type=\"submit\" name=\"user\" value=\"user_" . $ime . " \">Send request</button>\n\n";
-=======
-                                echo "<li>" . $ime . "</li><button type=\"submit\" class=\"gumb2\" name=\"gumb2\" value=\"send\" id=\" " . $ime . "\">Send request</button>\n\n";
->>>>>>> 3add09eeaf8a14317e6cfef6e54d6141c8192c42
+
                             }
                         }
                 }
         }
     }
 }
-<<<<<<< HEAD
+
 
 require_once "redirect.php";
 ?>
-=======
-?>
->>>>>>> 3add09eeaf8a14317e6cfef6e54d6141c8192c42

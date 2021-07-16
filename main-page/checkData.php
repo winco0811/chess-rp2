@@ -3,9 +3,9 @@
 session_start();
 require_once '../app/database/db.class.php';
 
-while(1)
-{
-  try
+$changed = 0;
+
+try
   {
     $db = DB::getConnection();
     $st = $db->prepare( 'SELECT username, gameId, color, opponet FROM users WHERE username=:username' );
@@ -20,11 +20,14 @@ while(1)
     $_SESSION['color'] = $row['color'];
     $_SESSION['username'] = $row['username'];
     $_SESSION['opponet'] = $row['opponet'];
-    break;
+    $changed = 1;
+
   }
   
   sleep(1);
-}
 
-header('Location: ../chess-js/igra-test-crni.php');
+if($changed === 1)
+    header('Location: ../chess-js/igra-test-crni.php');
+else
+    header('Location: main2.html');
 ?>
