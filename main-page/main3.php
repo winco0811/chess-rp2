@@ -48,7 +48,6 @@ if(isset($op)){
                     if(isset($ulaz))
                         if($ulaz !== ''){
                             if( strpos($ime, $ulaz) !== false ){
-                                #echo "<a href=\"info.php?kor_ime=" . $ime . "\"><li>" . $ime . "</li></a>\n";
                                 echo "<li>" . $ime . "</li><button type=\"submit\" class=\"gumb2\" name=\"gumb2\" value=\"send\" id=\" " . $ime . "\">Send request</button>\n\n";
                             }
                         }
