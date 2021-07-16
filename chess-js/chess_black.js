@@ -28,6 +28,7 @@ function stavi_makni(i,micem) {
         }	
 }
 function cekaj_potez() {
+	console.log("Slušam!");
 	$.ajax(
     {
         url: "cekaj_potez.php",
@@ -49,22 +50,23 @@ function cekaj_potez() {
             else
             {
                 // Ako nema greške, pročitaj poruku i dodaj ju u div.
-                let potez = decodeURI( data.msg )
+                let potez = decodeURI( data.msg );
 		let p1 = potez.substr(0,2);
-		let p2 = potez.substr(3,5);
-		console.log(p2);	
-                let figura = $("#"+p1).text();
-                let kod_figure = position[from_coords($("#"+p1).attr('id'))];
-                console.log(figura + " " + kod_figure);
-                $("#"+p2).text(figura);
-                position[from_coords($("#"+p2).attr('id'))]=kod_figure;
-                $("#"+p1).text("");
-                position[from_coords($("#"+p1).attr('id'))]="--";
-                if (piece_color=="white") {
-                         to_move="white";
-                } else {
-                        to_move="black";
-                }
+		let p2 = potez.substr(3,2);
+		let igrac = potez.substr(6,1);
+                if ((igrac == "W" && piece_color == "black") || (igrac == "B" && piece_color == "white")) {
+			let figura = $("#"+p1).text();
+                	let kod_figure = position[from_coords(p1)];
+			$("#"+p2).text(figura);
+                	position[from_coords(p2)]=kod_figure;
+                	$("#"+p1).text("");
+                	position[from_coords(p1)]="--";
+                	if (piece_color=="white") {
+                        	to_move="white";
+                	} else {
+                        	to_move="black";
+                	}
+		}
                 timestamp = data.timestamp;
                 cekaj_potez();
             }
@@ -464,8 +466,8 @@ $(function(){
         }
 	cekaj_potez();
 	cells.click(function(event) {
-		console.log(to_move+" "+piece_color);
-		if (to_move==piece_color && (position[from_coords($(this).attr('id'))][0]==pc || position[from_coords($(this).attr('id'))][0]=="-")) {
+		console.log(to_move);
+		if (to_move==piece_color && (position[from_coords($(this).attr('id'))][0]==pc || position[from_coords($(this).attr('id'))][0]=="-") || $(this).hasClass("moguc")) {
 			if ($(this).hasClass("odabran") || (position[from_coords($(this).attr('id'))]=="--" && !$(this).hasClass("moguc"))) {
 				if (odabran!=null) {
 					moguci_potezi(odabran, true);
@@ -477,13 +479,12 @@ $(function(){
 				$("#"+odabran).removeClass("odabran");
                 	        let figura = $("#"+odabran).text();
 				let kod_figure = position[from_coords($("#"+odabran).attr('id'))];
-				console.log(figura + " " + kod_figure);
 				$(this).text(figura);
 				position[from_coords($(this).attr('id'))]=kod_figure;
 				console.log(position[from_coords($(this).attr('id'))]);
 				$("#"+odabran).text("");
 				position[from_coords($("#"+odabran).attr('id'))]="--";
-				salji_potez($("#"+odabran).attr('id')+" "+$(this).attr('id'));
+				salji_potez($("#"+odabran).attr('id')+" "+$(this).attr('id')+" "+((piece_color=="white")?"W":"B"));
 				odabran=null;
 				if (piece_color=="white") {
 					to_move="black";
