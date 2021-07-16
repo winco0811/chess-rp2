@@ -1,5 +1,6 @@
 <?php
-//tu treba kopirati db.class.php da bi radilo??, s require_once ne radi
+
+
 class User
 {
 	protected $username, $opponet, $color, $gameId, $move, $password;
@@ -77,6 +78,13 @@ class User
 	//obrisi igru sa gameId = $gameId (postavi gameId na 0, izbrisi boju, varijablu move i opponet)
 	public static function deleteGame ($gameId)
 	{
+		try
+		{
+			$db = DB::getConnection();
+			$st = $db->prepare( 'UPDATE  users set gameId=0, opponet="", move="", color="" WHERE gameId=:gameId' );
+			$st->execute( array( 'gameId' => $gameId ) );
+		}
+		catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
 		try
 		{
 			$db = DB::getConnection();

@@ -40,7 +40,7 @@ function procesiraj_login()
 			// Dobar je. Ulogiraj ga.
       session_start();
       $_SESSION['username'] = $_POST['username'];
-      header("location: ../index.php");
+      header("location: ../main-page/main2.html");
 
 			return;
 		}

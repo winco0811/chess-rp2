@@ -1,29 +1,5 @@
 <?php
 
-//isti problem kao u klasi user.class.php, treba dodati class DB od database-a da rade funkcije.
-//ostalo radi kako treba
-class DB
-{
-	private static $db = null;
-
-	private function __construct() { }
-	private function __clone() { }
-
-	public static function getConnection() 
-	{
-		if( DB::$db === null )
-	    {
-	    	try
-	    	{
-		    	DB::$db = new PDO('mysql:host=localhost;dbname=chess;charset=utf8','root','root');
-		    	DB::$db-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		    }
-		    catch( PDOException $e ) { exit( 'PDO Error: ' . $e->getMessage() ); }
-	    }
-		return DB::$db;
-	}
-}
-
 //brine se o potezima, lastMove je zadnji odigrani potez izmedu 2 igraca
 class Game
 {
