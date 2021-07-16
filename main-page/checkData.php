@@ -23,12 +23,12 @@ try
   
   sleep(1);
 
-if($playable !== 0){
+if($_SESSION['gameId'] != 0){
   //nemoze igrat
     header('Location: ../chess-js/igra-test-crni.php');
   }
 else{
   //moze igrat, preusmjeri ga na crnog igraca
-    echo "0" . $_SESSION["username"] . " " . $_SESSION["gameId"];
+    header('Location: main2.html');
   }
 ?>
