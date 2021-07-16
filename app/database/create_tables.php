@@ -1,6 +1,6 @@
 <?php
 
-// Stvaramo tablice u bazi (ako već ne postoje od ranije).
+// Stvaramo tablice u bazi (ako već ne postoje od ranije)
 require_once __DIR__ . '/db.class.php';
 
 create_table_users();
@@ -12,7 +12,7 @@ function create_table_users()
 {
 	$db = DB::getConnection();
 
-	// Stvaram tablicu users.
+	// Stvaram tablicu users
 	try
 	{
 		$st = $db->prepare(
@@ -37,7 +37,7 @@ function create_table_games()
 {
 	$db = DB::getConnection();
 
-	// Stvaramo tablicu games.
+	// Stvaramo tablicu games
 	try
 	{
 		$st = $db->prepare(
@@ -61,7 +61,7 @@ function create_table_history()
 {
 	$db = DB::getConnection();
 
-	//stvori tablicu history.
+	//stvori tablicu history
 	try
 	{
 		$st = $db->prepare(
