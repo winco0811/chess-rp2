@@ -154,7 +154,7 @@ input:focus-within {
     top: 90%;
     left: 33%;
     transform: translate(-33%,-90%);
-    width: 300px;
+    width: 400px;
     height: 500px;
     border: 3px solid black;
     max-height:450px;
