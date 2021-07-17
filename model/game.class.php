@@ -1,6 +1,28 @@
 <?php
 
 //brine se o potezima, lastMove je zadnji odigrani potez izmedu 2 igraca
+class DB
+{
+	private static $db = null;
+
+	private function __construct() { }
+	private function __clone() { }
+
+	public static function getConnection() 
+	{
+		if( DB::$db === null )
+	    {
+	    	try
+	    	{
+		    	DB::$db = new PDO('mysql:host=localhost;dbname=chess;charset=utf8','root','root');
+		    	DB::$db-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		    }
+		    catch( PDOException $e ) { exit( 'PDO Error: ' . $e->getMessage() ); }
+	    }
+		return DB::$db;
+	}
+}
+
 class Game
 {
 	protected $moveId, $moveUser, $lastMove, $moveString;
@@ -28,8 +50,7 @@ class Game
 				return $move;
 			}
 		}
-		//inace ako ne pronade zadnji potez onda vraca FEN reprezentaciju pocetne pozicije
-		$move = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+		$move = "";
 		return $move;		
 	}
 	
@@ -55,23 +76,31 @@ class Game
 	}
 	
 	//ubaci potez u bazu gdje je gameId = Id i postavi move = moveString
-	public function insert($id)
+	public function insert($id, $move)
 	{
-		$moveUser = $this->moveUser;
-		$moveString = $this->moveString;
-		$moveId = 1;
-		
 		try
 		{
 			$db = DB::getConnection();
 			$st = $db->prepare( 'UPDATE users SET move=:move WHERE gameId=:gameId' );
-			$st->execute( array( 'move' => $moveString, 'gameId' => $id ) );
+			$st->execute( array( 'move' => $move, 'gameId' => $id ) );
 		}
 		catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
 
 	}
 	
-	
+	public function getUpdated_at($username)
+	{
+		try
+		{
+			$db = DB::getConnection();
+			$st = $db->prepare( 'SELECT updated_at FROM users WHERE username=:username' );
+			$st->execute( array( 'username' => $username ) );
+		}
+		catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+		
+		$row = $st->fetch();
+		return $row["updated_at"];
+	}
 	
 }
 

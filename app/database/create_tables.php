@@ -22,7 +22,7 @@ function create_table_users()
 			'color varchar(10) NOT NULL,' .
 			'gameId INT NOT NULL,' .
 			'move varchar(100) NOT NULL,' .
-			'date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,' .
+			'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,' .
 			'password varchar(255) NOT NULL)'
 		);
 
