@@ -3,9 +3,6 @@ Uspjesan login
 require_once "model/game.class.php";
 
 $igra = new Game();
+echo $igra->findLastMove(4);
 
-$igra->insert(4,"e4");
-$t = $igra->getUpdated_at("ff");
-
-echo $t;
  ?>

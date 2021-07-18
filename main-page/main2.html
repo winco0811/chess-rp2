@@ -11,8 +11,8 @@
 
     <div class="naslov">
         <h1>Online Chess</h1>   
-        <form method="post" action="checkData.php">
-          <button type="submit" class="gumb" name="check" value="checkuser">Check request</button>
+        <form method="post" action="requestSent.php">
+          <button type="submit" class="gumb" name="check" value="checkuser" id="redirect">Check request</button>
         </form>          
     </div>
 
@@ -33,6 +33,7 @@
 $( document ).ready( function()
 {
 	$( "button" ).on( "click", lista );
+  check( );
 } );
 
 
@@ -58,6 +59,45 @@ lista = function()
             if(status !== null)
                 console.log("Greška prilikom Ajax poziva: " + status);
         }
+	} );
+}
+
+//pretvori gumb check request u zeleno, oznacava da je igrac dobio request za igrat.
+check = function( )
+{
+	$.ajax(
+	{
+		url: "checkData.php",
+		dataType: "json",
+		data:
+		{
+			
+		},
+		success: function( data )
+		{
+			console.log( "test:" + JSON.stringify( data ) );
+      //gumb se promjenio
+      if( data.changed == "true" )
+      {
+        //promjeni boju gumba u zeleno
+        $('#redirect').css('background-color','green'); 
+      }
+      else
+      {
+        //promjeni boju u crveno jer korisnik nema nikakvih requesteva za igru
+        $('#redirect').css('background-color','red'); 
+      }  
+			if( typeof( data.error ) === "undefined" )
+			{
+				check( );
+			}
+		},
+		error: function( xhr, status )
+		{
+			console.log( "error :: status = " + status ); 
+			if( status === "timeout" )
+				check( );
+		}
 	} );
 }
 

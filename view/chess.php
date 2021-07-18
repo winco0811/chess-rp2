@@ -14,6 +14,17 @@ else
 
 if( isset($_SESSION['username']) && isset($_POST['logout'] ) ){
 	unset($_SESSION["username"]);
+	if(isset($_SESSION["opponet"]))
+			unset($_SESSION["opponet"]);
+			
+	if(isset($_SESSION["color"]))
+			unset($_SESSION["color"]);
+			
+	if(isset($_SESSION["gameId"]))
+			unset($_SESSION["gameId"]);
+	
+	if(isset($_SESSION["move"]))
+			unset($_SESSION["move"]);
 	session_unset();
 	session_destroy();
 }
