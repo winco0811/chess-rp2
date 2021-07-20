@@ -25,7 +25,7 @@ try
 
 if($_SESSION['gameId'] != 0){
   //nemoze igrat
-    header('Location: ../chess-js/igra-test-crni.php');
+    header('Location: ../chess-js/igra-chess.php');
   }
 else{
   //moze igrat, preusmjeri ga na crnog igraca

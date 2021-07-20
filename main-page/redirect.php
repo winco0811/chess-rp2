@@ -41,7 +41,7 @@ if(isset( $_POST["user"]))
     }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
   }
-  header('Location: ../chess-js/igra-test-bijeli.php');
+  header('Location: ../chess-js/igra-chess.php');
 }
 
 

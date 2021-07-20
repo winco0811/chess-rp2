@@ -68,18 +68,18 @@ class Game
 
 	}
 	
-	public function getUpdated_at($username)
+	public function getUpdated_at($gameid)
 	{
 		try
 		{
 			$db = DB::getConnection();
-			$st = $db->prepare( 'SELECT updated_at FROM users WHERE username=:username' );
-			$st->execute( array( 'username' => $username ) );
+			$st = $db->prepare( 'SELECT UNIX_TIMESTAMP(updated_at) FROM users WHERE gameid=:gameid' );
+			$st->execute( array( 'gameid' => $gameid ) );
 		}
 		catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
 		
 		$row = $st->fetch();
-		return $row["updated_at"];
+		return $row["UNIX_TIMESTAMP(updated_at)"];
 	}
 	
 }

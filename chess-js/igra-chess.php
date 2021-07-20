@@ -22,9 +22,14 @@ bijeli pijun - &#9817;
 	<title>Chess</title>
 	<link rel="stylesheet" href="game_style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-	<script src="chess_white.js"></script>
+	<script src="chess.js"></script>
 </head>
 <body>
+<?php
+session_start();
+$piece_color=$_SESSION["color"];
+$game_id=$_SESSION["gameId"];
+?>
 	<table class="ploca">
 		<tr>
 			<td class="white-row" id="a8">&#9820;</td>
@@ -86,16 +91,12 @@ for ($j = 0; $j < 4; $j++) {
 <div id="overlay">
 	<table class="ploca prom_ploca">
 		<tr>
-			<td class="promocija" id="pq">&#9813;</td>
-			<td class="promocija" id="pr">&#9814;</td>
-			<td class="promocija" id="pb">&#9815;</td>
-			<td class="promocija" id="pn">&#9816;</td>
+		<td class="promocija" id="pq"><?php if ($piece_color == "white") {echo "&#9813;";} else {echo "&#9819;";}?></td>
+		<td class="promocija" id="pr"><?php if ($piece_color == "white") {echo "&#9814;";} else {echo "&#9820;";}?></td>
+		<td class="promocija" id="pb"><?php if ($piece_color == "white") {echo "&#9815;";} else {echo "&#9821;";}?></td>
+		<td class="promocija" id="pn"><?php if ($piece_color == "white") {echo "&#9816;";} else {echo "&#9822;";}?></td>
 		</tr>
 	</table>	
 </div> 
-<?php
-$piece_color="white";
-$game_id=0;
-?>
 </body>
 </html>

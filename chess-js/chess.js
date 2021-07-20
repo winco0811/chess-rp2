@@ -14,13 +14,13 @@ let position = [
 	"WP","WP","WP","WP","WP","WP","WP","WP",
 	"WR","WN","WB","WQ","WK","WB","WN","WR"
 ];
-let piece_color = "black"; //ovdje treba staviti boju igrača iz ajaxa
+let piece_color; //ovdje treba staviti boju igrača iz ajaxa
 let to_move="white";
 let odabran=null;
 let castling=[true,true,true,true]; //je li dopustena rokada? [bijeli_kratko, bijeli_dugo, crni_kratko, crni_dugo]
 var ep=null;
 var send_string=null;
-var game_id="0"; //ovdje treba ići game id iz ajaxa
+var game_id; //ovdje treba ići game id iz ajaxa
 var timestamp = 0;
 function stavi_makni(i,micem,klasa) {
 	let a;
@@ -29,6 +29,37 @@ function stavi_makni(i,micem,klasa) {
         } else {
         	$("#"+to_coords(i)).addClass(klasa);
         }	
+}
+function get_info() {
+	$.ajax(
+		{
+			async: false,
+			url: "cekaj_potez.php",
+	    		type: "GET",
+	    		data: "",
+        dataType: "json",
+        success: function( data )
+        {
+            console.log( "cekaj_potez :: success :: data = " + JSON.stringify( data ) );
+            if( typeof( data.error ) !== "undefined" )
+            {
+                console.log( "cekaj_potez :: success :: server javio grešku " + data.error );
+            }
+            else
+            {
+		piece_color=data.color;
+		game_id=data.id;
+            }
+        },
+        error: function( xhr, status )
+        {
+            console.log( "cekaj_potez :: error :: status = " + xhr.status );
+            // Nešto je pošlo po krivu...
+            // Ako se dogodio timeout, tj. server nije ništa poslao u zadnjih XY sekundi,
+            // pozovi ponovno cekaj_potez.
+            if( status === "timeout" ) get_info();
+        }
+    } );
 }
 function pod_sahom(boja,moguc_potez="") {
 	let p1, p2, p1_old_position, p2_old_position;
@@ -620,6 +651,7 @@ function moguci_potezi(id, micem=false, klasa="moguc", provjere=true) { //drugi 
 	}
 }
 $(function(){
+	get_info();
 	let over = false;
 	let cells = $("td");
 	let pc;
