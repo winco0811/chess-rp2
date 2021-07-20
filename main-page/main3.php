@@ -33,6 +33,7 @@ function getAllUsers( )
 
 $imena = getAllUsers(); //treba sadržavati sve username-ove u bazi
 
+//"slanje"
 if(isset($op)){
 
     if($op === "search"){
@@ -48,8 +49,6 @@ if(isset($op)){
                     if(isset($ulaz))
                         if($ulaz !== ''){
                             if( strpos($ime, $ulaz) !== false ){
-
-                                #echo "<a href=\"info.php?kor_ime=" . $ime . "\"><li>" . $ime . "</li></a>\n";
                                 echo "<li>" . $ime . "</li><button type=\"submit\" name=\"user\" value=\"user_" . $ime . " \">Send request</button>\n\n";
 
                             }
