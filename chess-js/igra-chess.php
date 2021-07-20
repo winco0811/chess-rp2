@@ -97,6 +97,9 @@ for ($j = 0; $j < 4; $j++) {
 		<td class="promocija" id="pn"><?php if ($piece_color == "white") {echo "&#9816;";} else {echo "&#9822;";}?></td>
 		</tr>
 	</table>	
-</div> 
+</div>
+<form method="post" action="../main-page/clearRequests.php">
+	<button type="submit" name="clear" value="clearGames" class="clear">BACK</button>
+</form> 
 </body>
 </html>

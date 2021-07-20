@@ -1,3 +1,11 @@
+.clear {
+	position: fixed;
+	top: 200px;
+  	left: 900px;
+	cursor: pointer;
+	font-size: 50px;
+
+}
 .prom_ploca {
 	margin-left: 900px;
 	margin-top: 400px;
