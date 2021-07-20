@@ -10,69 +10,6 @@
 
 \maketitle
 
-\section{rules.js, play.html}
-\subsection{Varijable}
-Na početku koristimo angular kako bi stvorili zasebne "box"-ove odnosno ša\-ho\-vska po\-lja. Pomoću toga sada imamo box-$x$-$y$ gdje $x$ i $y$ označavaju koordinate tog polja.
-
-Na početku \verb|$(document).ready(function())|, na liniji $12$, de\-fi\-ni\-ra\-mo \\ 
-\verb|chessPieces| u kojima se nalaze slike određenih figura. Slike figura prikazujemo HTML kodom. Tako na primjer string "\&\#9812" označava sliku bijelog kralja i tako dalje...
-
-Varijabla \verb|player| je zadužena za pratiti koji igrač je trenutno na redu, bijeli ili crni. Na početku je jednaka white jer je na početku bijeli na potezu. Varijabla \verb|promotion| će nam pomoći da postavimo potrebne podatke pri promociji pijuna.
-
-Pomoću varijable \verb|select| pratimo može li se zadana figura micati, tip figure te pozicija figure, odnosno u kojem box-u se nalazi.
-
-\subsection{Postavljanje ploče}
-Na liniji $48$, pozivamo funkciju koja je zadužena da polju s koordinatama $i$ i $j$ pridruži klasu \verb|dark-box|, odnosno \verb|light-box| ovisno o tome je li \verb|i+j| paran ili neparan broj. Time dobivamo šahovnicu. S funkcijom \verb|setNewBoard(box,i,j)| na polje sa koordinatama $(i,j)$ postavljamo figuru ako se na početku igre tamo treba prikazati ta figura. Figuru postavljamo na zadano polje s funkcijom  \\
-\verb|setPiece(box,color,type)|. Na kraju još pozivamo funkciju \verb|setTheme()| koja pomoču jQuery-a postavlja \verb|light-box| i \verb|dark-box| na zadanu boju.
-
-\subsection{Click event funkcije}
-
-Nakon postavljanje ploče definiramo funkciju koja je zadužena za click evente. Prvo obrađujemo slučaj ako je pijun promaknut. Odabirom od ponuđenih figura, ona se postavlja na potrebnu poziciju i postavlja klasu \verb|placed|.
-
-Kada kliknemo na polje tada se poziva funkcija zadužena za klik na klasu \verb|box|. Ako je taj box, odnosno polje već od prije bilo odabrano to jest, ima klasu \verb|selected|, tada se ta klasa za to polje briše i klasa \verb|suggest| koja označava moguća polja kojom se ta figura može kretati također briše, a varijablu \verb|select| postavljamo na originalne vrijednosti.
-
-Sljedeće što moramo provjeriti je slučaj ako se figura može micati. U tom slučaju znamo da se u \verb|select.piece| nalaze sve potrebne informacije o figuri, boja i tip. Prvo provjerimo ako je odabrana druga figura iste boje. Ako je, tada odabiremo tu figuru. Figuru možemo pomaknuti samo na ona polja koja imaju klasu \verb|suggest|. Ako taj box ima klasu \verb|suggest|, tada pomoću funkcije \verb|setPiece(box, color, type)| postavljamo tu figuru na zadano polje (box) i brišemo prethodno polje. Varijablu \verb|select| opet vraćamo na originalne vrijednosti te mijenjamo igrača.
-
-
-
-
-
-\subsection{setPiece(box,color,type)}
-Funkcija \verb|setPiece(box,color,type)| na početku provjerava je li figura "pojela" kralja na tom polju. Ako je, tada se poziva \verb|showWinner()|, odnosno igra je završena. Dodatno, ona još provjerava je li pijun u poziciji za promaknuće. Varijabla \verb|j| će nam reći na kojem rangu se nalazi figura. Ako je pijun u poziciji za promaknuće, tada se igra "zatamnjuje" pomoću \verb|opacity| te pomoću jQuery-a prikazujemo popis figura u koje se pijun može promaknuti. Na kraju jednostavno postavimo HTML tekst u određeni HTML znak figure.
-
-\subsection{deleteBox(box)}
-
-Ova funkcija briše figuru sa određenog polja. Također briše klasu \verb|placed| i \verb|selected| sa određenog polja.
-
-\subsection{getNextMoves(selectedPiece, selectedBox)}
-
-Funkcijom \verb|getNextMoves| dohvaćamo moguće poteze odabrane figure. Prvo dohvatimo informacije o figuri i spremimo ih u određene varijable. Zatim na sličan način dohvatimo i koordinate na kojima se ta figura nalazi. Ovisno o tome o kojoj figuri je riječ, pozivamo funkciju koja u varijablu \verb|nextMoves| vraća sve moguće poteze te figure. Toj funkciji prosljeđujemo parametar \verb|offset| koja predstavlja u kojim sve smjerovima se određena figura može micati.
-
-Sastoji se od niza $[x,y]$ pri čemu $x$ predstavlja pomak u okomitom smjeru dok $y$ predstavlja pomak u vodoravnom smjeru. Tako na primjer top (eng. "rook") ima postavljen \verb|offset| na $\left[[0,1],[0,-1],[1,0],[-1,0]\right]$ jer se top može po pravilima micati gore,dolje,lijevo i desno. Za pijuna imamo u \verb|offset|-u i $[0,2]$ odnosno $[0,-2]$ jer kad je pijun na početnom položaju onda se može micati za $2$ polja gore odnosno dolje, ovisno o tome o kojoj boji je riječ.
-
-Za konja (eng. knight) \verb|offset| ima niz $[2,-1]$ jer konj se može kretati za $2$ polja gore i jedno polje ulijevo.Slično kao i za topa smo postavili i \verb|offset| drugim varijablama.
-
-\subsection{pawnMoves(i, j, color, moves)}
-
-S ovom funkcijom dohvaćamo moguće poteze pijuna. U \verb|tI| spremamo okomiti smjer a u varijablu \verb|tJ| vodoravni smjer micanja figure. Prolazimo kroz varijablu \verb|offset| te provjeravamo hoćemo li otići izvan granica ploče za odabranu figuru. Ako nećemo, tada provjeravamo još nalazi se na putu neka druga figura (to radimo pomoću klase placed). Sve te moguće poteze spremamo u \verb|nextMoves| te ju nakraju funkcije vraćamo.
-
-\subsection{knightMoves(i, j, color, moves)}
-
-Ovom funkcijom dohvaćamo moguće poteze konja i kralja. Slično kao i prije, ako se na tom mjestu nalazi protivnikova figura tada ta figura može otići na to mjesto. To provjeravamo sa \verb|indexOf(color)| koja vraća negativnu vrijednost ako ne pronađe index na kojem se nalazi podstring "color".
-
-\subsection{otherPiecesMoves(i, j, color, moves)}
-
-Ovom funkcijom dohvaćamo moguće poteze ostalih figura (kraljica, lovac, top). Ovdje koristimo varijablu \verb|sugg| pomaže u detektiranju ako se neka figura nalazi na putu mogućih poteza. U tom slučaju gledamo je li ta figura protivnikova ili nije. Ako je protivnikova tada se i tamo možemo micati s tom figurom. U suprotnom, ne možemo jesti svoje figure pa se dalje ne možemo kretati.
-
-\subsection{suggestNextMoves}
-
-Funkcija pomoću koje za sve legalne poteze dodajemo tim poljima klasu \\
-\verb|suggest|.
-
-\subsection{selectPiece(box)}
-
-Odabirom na figuru pozivamo ovu funkciju. Tom polju dodajemo klasu \verb|selected| te u varijablu \verb|select| postavljamo navedene vrijednosti. Dohvaćamo legalne poteze i sugeriramo na koja sva polja se figura može kretati.
-
 \section{Main page}
 U dokumentu  \textit{main2.html} nalazi se view glavne stranice web aplikacije. \newline \newline
 Omogućili smo korisniku da u tražilicu upiše korisničko ime osobe protiv koje bi htio igrati i pošalje mu zahtjev. Ako ta druga osoba prihvati oboje su preusmjereni na stranicu sa igrom šah. (Vinkov dio)
@@ -86,6 +23,16 @@ Linije 34-58: funkcija u kojoj se nalazi ajax. Ako je uspješan u listu ću upis
 Linije 62-72: imamo ponavljanje koda sa stranice za login - dio koji upućuje korisnika na pomoć pri učenju igranja šaha
 \newline \newline
 Linija 78: link na stranicu za Logout koji smo u css-u oblikovali da izgleda kao gumb\newline
+
+\subsection{Sparivanje 2 igrača}
+
+Jednom kada smo u tražilicu utipkali ime protivnika, možemo izabrati gumb \verb|Send Request| pomoću kojeg šaljemo notifikaciju protivniku da netko s njim/njom želi igrati te automatski korisnika šaljemo na ploču da igra s bijelim figurama. 
+
+Pritiskom na gumb \verb|Send Request| poziva se skriota \verb|checkData.php| u kojom generiramo \verb|gameId| te u varijablu \verb|_SESSION| stavljamo podatke o protivniku, s kojom bojom se igra i \verb|gameId|. Ako je korisnik stisnuo na nekog drugog osim sebe, tada u bazu podataka spremamo podatke o tome tko je protivnik, \verb|gameId|, \verb|color| i šaljemo ga da igra s bijelim figurama.
+
+Također, na stranici možemo vidjeti i gumb \verb|Check request| pomoću kojeg možemo provjeriti imamo li zahtjev za igru. Ako imamo tada klikom na taj gumb poziva se skripta \verb|requestSent.php| te prelazimo na ploču gdje igramo s crnim figurama. U slučaju da nemamo zahtjev za igru tada je gumb označen crvenom bojom, u protivnom, gumb je označen zelenom bojom. U toj skripti se provjerava ako korisnik ima \verb|gameId| postavljen na $0$. Ako nema tada ga ne šaljemo nigdje. 
+
+Boju gumba mijenjamo pomoću \verb|ajax-a| i skripte \verb|checkData.php|. U skripti \verb|checkData.php| provjeravamo je li \verb|gameId| jednak $0$. Ako je različit od $0$ tada šaljemo poruku da se \verb|gameId| promjenio te \verb|ajax| mijenja boju gumba. U protivnom je boja gumba crvena.
 
 \subsection{style for main page}
 
