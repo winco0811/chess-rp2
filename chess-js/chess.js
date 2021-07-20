@@ -34,7 +34,7 @@ function get_info() {
 	$.ajax(
 		{
 			async: false,
-			url: "cekaj_potez.php",
+			url: "get_info.php",
 	    		type: "GET",
 	    		data: "",
         dataType: "json",

@@ -12,6 +12,7 @@ function sendJSONandExit( $message )
 }
 
 $response = array();
+error_log($_SESSION["color"] . $_SESSION["gameId"]);
 $response[ 'color' ] = $_SESSION["color"];
 $response[ 'id' ] = $_SESSION["gameId"];
 

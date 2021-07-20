@@ -1,4 +1,6 @@
 <?php
+require_once "../model/game.class.php";
+require_once "../model/user.class.php";
 //napisao profesor, modificirao tim
 
 function sendJSONandExit( $message )
