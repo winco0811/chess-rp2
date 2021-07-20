@@ -14,25 +14,20 @@ let position = [
 	"WP","WP","WP","WP","WP","WP","WP","WP",
 	"WR","WN","WB","WQ","WK","WB","WN","WR"
 ];
-let piece_color = "black";
+let piece_color = "black"; //ovdje treba staviti boju igrača iz ajaxa
 let to_move="white";
 let odabran=null;
 let castling=[true,true,true,true]; //je li dopustena rokada? [bijeli_kratko, bijeli_dugo, crni_kratko, crni_dugo]
 var ep=null;
 var send_string=null;
-var game_id="0";
+var game_id="0"; //ovdje treba ići game id iz ajaxa
 var timestamp = 0;
-function stavi_makni(i,micem,testiram) {
+function stavi_makni(i,micem,klasa) {
 	let a;
-	if (testiram) {
-		a = "t_moguc";
-	} else {
-		a = "moguc";
-	}
 	if (micem) {
-        	$("#"+to_coords(i)).removeClass(a);
+        	$("#"+to_coords(i)).removeClass(klasa);
         } else {
-        	$("#"+to_coords(i)).addClass(a);
+        	$("#"+to_coords(i)).addClass(klasa);
         }	
 }
 function pod_sahom(boja,moguc_potez="") {
@@ -58,20 +53,45 @@ function pod_sahom(boja,moguc_potez="") {
 	for (let i=0; i<64; i++) {
 		if (position[i][0]==protivnik) {
 			let coords = to_coords(i);
-			moguci_potezi(coords, false, true, false);
+			moguci_potezi(coords, false, "t_moguc", false);
 			for (let j=0; j<64; j++) {
 				if ($("#"+to_coords(j)).hasClass("t_moguc") && position[j]==kralj) {
-					moguci_potezi(coords, true, true, false);
-					position[from_coords(p2)]=p2_old_position;
-                                	position[from_coords(p1)]=p1_old_position;
+					moguci_potezi(coords, true, "t_moguc", false);
+					if (moguc_potez!="") {
+						position[from_coords(p2)]=p2_old_position;
+                                		position[from_coords(p1)]=p1_old_position;
+					}
                                 	return true;
 				}
 			}
-			moguci_potezi(coords, true, true, false);
+			moguci_potezi(coords, true, "t_moguc", false);
 		}
 	}
-        position[from_coords(p2)]=p2_old_position;
-        position[from_coords(p1)]=p1_old_position;
+	if (moguc_potez!="") {
+	        position[from_coords(p2)]=p2_old_position;
+        	position[from_coords(p1)]=p1_old_position;
+	}
+	return false;
+}
+function ima_potez(boja) {
+	let b;
+	if (boja == "bijela") {
+		b="W";
+	} else {
+		b="B"
+	}
+	for (let i=0; i<64; i++) {
+		if (position[i][0]==b) {
+			moguci_potezi(to_coords(i),false,"m_moguc");
+			for (let j=0; j<64; j++) {
+				if ($("#"+to_coords(j)).hasClass("m_moguc")) {
+					moguci_potezi(to_coords(i),true,"m_moguc");
+					return true;
+				}
+			}
+			moguci_potezi(to_coords(i),true,"m_moguc");
+		}
+	}
 	return false;
 }
 function cekaj_potez() {
@@ -165,6 +185,13 @@ function cekaj_potez() {
 					}
 
 				}
+				if (!ima_potez(piece_color)) {
+					if (pod_sahom(piece_color)) {
+						alert("Šah mat! Izgubili ste"); //hendlaj gubitak
+					} else {
+						alert("Remi!"); //hendlaj remi
+					}
+				}
         	        	if (piece_color=="white") {
                 	        	to_move="white";
                 		} else {
@@ -190,6 +217,13 @@ function cekaj_potez() {
                                         $("#"+to_coords(from_coords(p1)-4)).text("");
                                         position[from_coords(p1)-4]="--";
 				}
+				if (!ima_potez(piece_color)) {
+                                        if (pod_sahom(piece_color)) {
+                                                alert("Šah mat! Izgubili ste"); //hendlaj gubitak
+                                        } else {
+                                                alert("Remi!"); //hendlaj remi
+                                        }
+                                }
 				if (piece_color=="white") {
                                         to_move="white";
                                 } else {
@@ -233,7 +267,7 @@ function salji_potez(potez) {
         }
     } );
 }
-function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi argument je true ako micem opcije
+function moguci_potezi(id, micem=false, klasa="moguc", provjere=true) { //drugi argument je true ako micem opcije
 	let indeks=from_coords(id);
 	let i = 0;
 	let izadji = false;
@@ -258,7 +292,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
 					if (izadji) continue;
                                 }
 				if (i==indeks) continue;
-				if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+				if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
 			}
 			for (i = indeks%8; i < 64; i+=8) {
 				if (i<indeks) {
@@ -279,7 +313,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                 }
                                 if (i==indeks) continue;
                                 if (i==indeks) continue;
-                        	if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                        	if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
 			}
 			if (position[indeks]=="BR") break;
 		case "BB":
@@ -290,7 +324,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                 	if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i=indeks-9; i>=0 && i<=63 && i%8<indeks%8; i-=9) {
 				if (position[i][0]=="B") continue;
@@ -299,7 +333,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i=indeks+9; i>=0 && i<=63 && i%8>indeks%8; i+=9) {
 				if (position[i][0]=="B") continue;
@@ -308,7 +342,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i=indeks+7; i>=0 && i<=63 && i%8<indeks%8; i+=7) {
 				if (position[i][0]=="B") continue;
@@ -317,98 +351,98 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("black",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         break;
 		case "BN":
 			i=indeks-17;
 			if (i>=0 && i<=63 && i%8<indeks%8) {
-				if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+				if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
 			}
 			i=indeks-15;
 			if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-10;
 			if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-6;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+6;
                         if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+10;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+15;
                         if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+17;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			break;
 		case "BK":
 			i=indeks-9;
 			if (i>=0 && i%8<indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-8;
 			if (i>=0) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-7;
 			if (i>=0 && i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-1;
                         if (i%8<indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+1;
                         if (i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+7;
                         if (i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+8;
                         if (i<=63) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+9;
                         if (i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="B" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-2; //castle long black
 			if (castling[3]) {
-				if (position[indeks-1]=="--" && position[indeks-2]=="--" && position[indeks-3]=="--" && position[indeks-4]=="BR" && (!provjere || (!pod_sahom("black",id+" "+to_coords(indeks-1)) && !pod_sahom("black",id+" "+to_coords(indeks-2)) && !pod_sahom("black",id+" "+to_coords(indeks))))) stavi_makni(i,micem,testiram);
+				if (position[indeks-1]=="--" && position[indeks-2]=="--" && position[indeks-3]=="--" && position[indeks-4]=="BR" && (!provjere || (!pod_sahom("black",id+" "+to_coords(indeks-1)) && !pod_sahom("black",id+" "+to_coords(indeks-2)) && !pod_sahom("black",id+" "+to_coords(indeks))))) stavi_makni(i,micem,klasa);
 			}
 			i=indeks+2;  //castle short black
 			if (castling[2]) {
-	                        if (position[indeks+1]=="--" && position[indeks+2]=="--" && position[indeks+3]=="BR" &&(!provjere || (!pod_sahom("black",id+" "+to_coords(indeks+1)) && !pod_sahom("black",id+" "+to_coords(indeks+2)) && !pod_sahom("black",id+" "+to_coords(indeks))))) stavi_makni(i,micem,testiram);
+	                        if (position[indeks+1]=="--" && position[indeks+2]=="--" && position[indeks+3]=="BR" &&(!provjere || (!pod_sahom("black",id+" "+to_coords(indeks+1)) && !pod_sahom("black",id+" "+to_coords(indeks+2)) && !pod_sahom("black",id+" "+to_coords(indeks))))) stavi_makni(i,micem,klasa);
 			}
 			break;
 		case "BP":
 			i=indeks+8;
                         if (i<=63) {
-                                if (position[i]=="--" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i]=="--" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			if (Math.trunc(indeks/8)==1) {
 				i=indeks+16;
-				if (position[i]=="--" && position[i-8]=="--" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+				if (position[i]=="--" && position[i-8]=="--" && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
 			}
 			i=indeks+7;
-                        if (i<=63 && i%8<indeks%8 && (position[i][0]=="W" || ep==i) && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                        if (i<=63 && i%8<indeks%8 && (position[i][0]=="W" || ep==i) && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         i=indeks+9;
-                        if (i<=63 && i%8>indeks%8 && (position[i][0]=="W" || ep==i) && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                        if (i<=63 && i%8>indeks%8 && (position[i][0]=="W" || ep==i) && (!provjere || !pod_sahom("black",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
 			break;
 		case "WQ":
 		case "WR":
@@ -430,7 +464,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (izadji) continue;
                                 }
                                 if (i==indeks) continue;
-                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i = indeks%8; i < 64; i+=8) {
                                 if (i<indeks) {
@@ -451,7 +485,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                 }
                                 if (i==indeks) continue;
                                 if (i==indeks) continue;
-                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                 	if (position[indeks]=="WR") break;
 		case "WB":
@@ -462,7 +496,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i=indeks-9; i>=0 && i<=63 && i%8<indeks%8; i-=9) {
                                 if (position[i][0]=="W") continue;
@@ -471,7 +505,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i=indeks+9; i>=0 && i<=63 && i%8>indeks%8; i+=9) {
                                 if (position[i][0]=="W") continue;
@@ -480,7 +514,7 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
                         for (i=indeks+7; i>=0 && i<=63 && i%8<indeks%8; i+=7) {
                                 if (position[i][0]=="W") continue;
@@ -489,98 +523,98 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
                                         if (position[j]!="--") izadji=true;
                                 }
                                 if (izadji) continue;
-                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,testiram);
+                                if(!provjere || !pod_sahom("white",id+" "+to_coords(i))) stavi_makni(i,micem,klasa);
                         }
 			break;
 		case "WN":
 			i=indeks-17;
                         if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-15;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-10;
                         if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-6;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+6;
                         if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks+10;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+15;
                         if (i>=0 && i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+17;
                         if (i>=0 && i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         break;
                 case "WK":
 			i=indeks-9;
                         if (i>=0 && i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-8;
                         if (i>=0) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-7;
                         if (i>=0 && i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-1;
                         if (i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+1;
                         if (i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+7;
                         if (i<=63 && i%8<indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+8;
                         if (i<=63) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks+9;
                         if (i<=63 && i%8>indeks%8) {
-                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i][0]!="W" && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
                         i=indeks-2;
                         if (castling[1]) { //castle long white
-                        	if (position[indeks-1]=="--" && position[indeks-2]=="--" && position[indeks-3]=="--" && position[indeks-4]=="WR" && (!provjere || (!pod_sahom("white",id+" "+to_coords(indeks-1)) && !pod_sahom("white",id+" "+to_coords(indeks-2)) && !pod_sahom("white",id+" "+to_coords(indeks))))) stavi_makni(i,micem,testiram);
+                        	if (position[indeks-1]=="--" && position[indeks-2]=="--" && position[indeks-3]=="--" && position[indeks-4]=="WR" && (!provjere || (!pod_sahom("white",id+" "+to_coords(indeks-1)) && !pod_sahom("white",id+" "+to_coords(indeks-2)) && !pod_sahom("white",id+" "+to_coords(indeks))))) stavi_makni(i,micem,klasa);
 			}
                         i=indeks+2;
                         if (castling[0]) { //castle short white
-                                if (position[indeks+1]=="--" && position[indeks+2]=="--" && position[indeks+3]=="WR" && (!provjere || (!pod_sahom("white",id+" "+to_coords(indeks+1)) && !pod_sahom("white",id+" "+to_coords(indeks+2)) && !pod_sahom("white",id+" "+to_coords(indeks))))) stavi_makni(i,micem,testiram);
+                                if (position[indeks+1]=="--" && position[indeks+2]=="--" && position[indeks+3]=="WR" && (!provjere || (!pod_sahom("white",id+" "+to_coords(indeks+1)) && !pod_sahom("white",id+" "+to_coords(indeks+2)) && !pod_sahom("white",id+" "+to_coords(indeks))))) stavi_makni(i,micem,klasa);
                         }
                         break;
                 case "WP":
 			i=indeks-8;
                         if (i>=0) {
-                                if (position[i]=="--"  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i]=="--"  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			if (Math.trunc(indeks/8)==6) {
                                 i=indeks-16;
-                                if (position[i]=="--" && position[i+8]=="--"  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                                if (position[i]=="--" && position[i+8]=="--"  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         }
 			i=indeks-7;
-			if (i>=0 && i%8>indeks%8 && (position[i][0]=="B" || ep==i)  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+			if (i>=0 && i%8>indeks%8 && (position[i][0]=="B" || ep==i)  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
                         i=indeks-9;
-                        if (i>=0 && i%8<indeks%8 && (position[i][0]=="B" || ep==i)  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,testiram);
+                        if (i>=0 && i%8<indeks%8 && (position[i][0]=="B" || ep==i)  && (!provjere || !pod_sahom("white",id+" "+to_coords(i)))) stavi_makni(i,micem,klasa);
 			break;
 		default:
 	}
@@ -588,11 +622,14 @@ function moguci_potezi(id, micem=false, testiram=false, provjere=true) { //drugi
 $(function(){
 	let over = false;
 	let cells = $("td");
-	let pc=null;
+	let pc;
+	let opp_piece_color;
 	if (piece_color=="white") {
         	pc="W";
+		opp_piece_color="black";
         } else {
         	pc="B";
+		opp_piece_color="white";
         }
 	cekaj_potez();
 	cells.click(function(event) {
@@ -608,14 +645,6 @@ $(function(){
                                                         $("#"+p2).text("\u265B");
                                                         position[from_coords(p2)]="BQ";
                                                 }
-                                                salji_potez(send_string);
-                                                odabran=null;
-                                                if (piece_color=="white") {
-                                                        to_move="black";
-                                                } else {
-                                                        to_move="white";
-                                                }
-                                                $("#overlay").css("display","none");
                                                 break;
                                         case "pr":
                                                 send_string+=" R";
@@ -627,14 +656,6 @@ $(function(){
                                                         $("#"+p2).text("\u265C");
                                                         position[from_coords(p2)]="BR";
                                                 }
-                                                salji_potez(send_string);
-						odabran=null;
-                                                if (piece_color=="white") {
-                                                        to_move="black";
-                                                } else {
-                                                        to_move="white";
-                                                }
-                                                $("#overlay").css("display","none");
                                                 break;
                                         case "pb":
                                                 send_string+=" B";
@@ -646,15 +667,7 @@ $(function(){
                                                         $("#"+p2).text("\u265D");
                                                         position[from_coords(p2)]="BB";
                                                 }
-                                                salji_potez(send_string);
-                                                odabran=null;
-                                                if (piece_color=="white") {
-                                                        to_move="black";
-                                                } else {
-                                                        to_move="white";
-                                                }
-                                                $("#overlay").css("display","none");
-                                                break;
+						break;
                                         case "pn":
                                                 send_string+=" N";
                                                 p2=send_string.substr(3,2);
@@ -665,16 +678,23 @@ $(function(){
                                                         $("#"+p2).text("\u265E");
                                                         position[from_coords(p2)]="BN";
                                                 }
-                                                salji_potez(send_string);
-                                                odabran=null;
-                                                if (piece_color=="white") {
-                                                        to_move="black";
-                                                } else {
-                                                        to_move="white";
-                                                }
-                                                $("#overlay").css("display","none");
-                                                break;
+						break;
                                 }
+			salji_potez(send_string);
+                        odabran=null;
+                        if (piece_color=="white") {
+                        	to_move="black";
+                        } else {
+                        	to_move="white";
+                        }
+                        $("#overlay").css("display","none");
+			if (!ima_potez(opp_piece_color)) {
+                       		if (pod_sahom(opp_piece_color)) {
+                                	alert("Šah mat! Pobijedili ste"); //hendlaj pobijedu
+                                } else {
+                                	alert("Remi!"); //hendlaj remi
+                                }
+                        }
 		} else if (to_move==piece_color && (position[from_coords($(this).attr('id'))][0]==pc || position[from_coords($(this).attr('id'))][0]=="-") || $(this).hasClass("moguc")) {
 			if ($(this).hasClass("odabran") || (position[from_coords($(this).attr('id'))]=="--" && !$(this).hasClass("moguc"))) {
 				if (odabran!=null) {
@@ -755,6 +775,13 @@ $(function(){
 				} else {
 					salji_potez(p1+" "+p2+" "+((piece_color=="white")?"W":"B"));
 					odabran=null;
+					if (!ima_potez(opp_piece_color)) {
+                                	        if (pod_sahom(opp_piece_color)) {
+                                        	        alert("Šah mat! Pobijedili ste"); //hendlaj pobijedu
+	                                        } else {
+        	                                        alert("Remi!"); //hendlaj remi
+                	                        }
+                                	}
 					if (piece_color=="white") {
 						to_move="black";
 					} else {
