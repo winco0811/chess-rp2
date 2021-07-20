@@ -3,8 +3,9 @@ Uspjesan login
 require_once 'app/database/db.class.php';
 require_once "model/game.class.php";
 
-$igra = new Game();
-echo "hello";
-echo $igra->getUpdated_at(0);
+session_start();
+echo $_SESSION["color"];
+echo $_SESSION["username"];
+echo $_SESSION["gameId"];
 
  ?>
