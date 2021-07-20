@@ -83,6 +83,16 @@ for ($j = 0; $j < 4; $j++) {
                         <td class="black-row" id="h1">&#9814;</td>
                 </tr>
 	</table>
+<div id="overlay">
+	<table class="ploca prom_ploca">
+		<tr>
+			<td class="promocija" id="pq">&#9813;</td>
+			<td class="promocija" id="pr">&#9814;</td>
+			<td class="promocija" id="pb">&#9815;</td>
+			<td class="promocija" id="pn">&#9816;</td>
+		</tr>
+	</table>	
+</div> 
 <?php
 $piece_color="white";
 $game_id=0;
