@@ -106,7 +106,7 @@ function pod_sahom(boja,moguc_potez="") {
 }
 function ima_potez(boja) {
 	let b;
-	if (boja == "bijela") {
+	if (boja == "white") {
 		b="W";
 	} else {
 		b="B"

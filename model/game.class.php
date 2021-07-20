@@ -1,5 +1,7 @@
 <?php
 
+require_once '../app/database/db.class.php';
+
 //brine se o potezima, lastMove je zadnji odigrani potez izmedu 2 igraca
 
 
@@ -79,7 +81,10 @@ class Game
 		catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
 		
 		$row = $st->fetch();
-		return $row["UNIX_TIMESTAMP(updated_at)"];
+		$row1 = $row['UNIX_TIMESTAMP(updated_at)'] ?? ''; 
+		if ($row) {
+			return $row["UNIX_TIMESTAMP(updated_at)"];
+		}
 	}
 	
 }
