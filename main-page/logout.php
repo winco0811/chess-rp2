@@ -1,11 +1,3 @@
-<?php
-
-
-
-/*echo 'Are you sure you want to logout? . <br><br>';*/
-
-//echo '<a href="stranica.php">Return to the main page</a> . <br><br>';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
