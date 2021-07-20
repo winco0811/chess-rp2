@@ -680,8 +680,8 @@ $(function(){
 				if (odabran!=null) {
 					moguci_potezi(odabran, true);
 				}
+				$("#"+odabran).removeClass("odabran");
 				odabran=null;
-				$(this).removeClass("odabran");
 			} else if ($(this).hasClass("moguc")) {
 				debugger;
 				let p1=$("#"+odabran).attr('id');
@@ -737,14 +737,14 @@ $(function(){
                                 }
 				if (kod_figure=="BK" && p1=="e8" && p2=="c8") {
                                         $("#d8").text($("#a8").text());
-                                        position[3]="WR";
+                                        position[3]="BR";
                                         $("#a8").text("");
                                         position[0]="--";
 					p2="CL";
                                 }
                                 if (kod_figure=="BK" && p1=="e8" && p2=="g8") {
                                         $("#f8").text($("#h8").text());
-                                        position[5]="WR";
+                                        position[5]="BR";
                                         $("#h8").text("");
                                         position[7]="--";
 					p2="CS";
