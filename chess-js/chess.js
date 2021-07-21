@@ -152,6 +152,8 @@ function cekaj_potez() {
 		let p2 = potez.substr(3,2);
 		let igrac = potez.substr(6,1);
                 if ((igrac == "W" && piece_color == "black") || (igrac == "B" && piece_color == "white")) {
+			$("#"+p1).addClass("odigrano");
+			$("#"+p2).addClass("odigrano");
 			if (p2!="CL" && p2!="CS") {
 				let figura = $("#"+p1).text();
         	        	let kod_figure = position[from_coords(p1)];
@@ -714,6 +716,9 @@ $(function(){
                                 }
 			salji_potez(send_string);
                         odabran=null;
+			for (let i=0; i<63; i++) {
+				$("#"+to_coords(i)).removeClass("odigrano");	
+			}
                         if (piece_color=="white") {
                         	to_move="black";
                         } else {
@@ -814,6 +819,9 @@ $(function(){
         	                                        alert("Remi!"); //hendlaj remi
                 	                        }
                                 	}
+					for (let i=0; i<63; i++) {
+                         		       $("#"+to_coords(i)).removeClass("odigrano");
+                        		}
 					if (piece_color=="white") {
 						to_move="black";
 					} else {
