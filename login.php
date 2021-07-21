@@ -62,9 +62,15 @@ function procesiraj_novi()
 	// Možda se ne šalje password; u njemu smije biti bilo što.
 	if( !isset( $_POST["password"] ) )
 		draw_registration();
-		
+
 	if( !isset( $_POST["email"] ) )
 		draw_registration();
+
+	if( $_POST["username"] == "" || $_POST["password"] == "" )
+	{
+		draw_registration( 'Username or password cannot be empty' );
+		return;
+	}
 
 	// Sve je OK, provjeri jel ga ima u bazi.
 	$db = DB::getConnection();
@@ -73,7 +79,7 @@ function procesiraj_novi()
 	{
 		$st = $db->prepare( 'SELECT password FROM users WHERE username=:username' );
 		$st->execute( array( 'username' => $_POST["username"] ) );
-	}	
+	}
 	catch( PDOException $e ) { draw_registration( 'Error:' . $e->getMessage() ); return; }
 
 	if( $st->rowCount() > 0 )
